@@ -13,6 +13,8 @@ paginate: true
 
 ### Referencia visual del tema
 
+#### David Ruiz y de esa forma quitamos
+
 ---
 
 <!-- _class: content -->
@@ -671,16 +673,16 @@ Escribe las fórmulas en bloque con `$$ ... $$` y usa estas macros:
 Ejemplos de escritura:
 
 ```tex
-\Proj_{\text{nombre},\text{salario}}(Empleados)
-\Sel_{\text{salario}>2000}(Empleados)
-\Ren_{\text{Emp}}(Empleados)
-\Group^{\mathrm{count}(Ped.id)}_{\text{P.de}}(Ped \NatJoin P)
-\Sel_{\text{Emp.id}=\text{Dept.id}}(Emp \JoinBy{\text{id}} Dept)
+\Proj_{nombre,salario}(Empleados)
+\Sel_{salario>2000}(Empleados)
+\Ren_{Emp}(Empleados)
+\Group^{count(Ped.id)}_{P.de}(Ped \NatJoin P)
+\Sel_{Emp.id=Dept.id}(Emp \JoinBy{\text{id}} Dept)
 ```
 
 ---
 <!-- _class: default -->
-# Mini tutorial: macros AR (KaTeX)
+# Mini tutorial: macros AR (KaTeX) 
 
 Renderizado:
 
