@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "CHROME_PATH=\"${CHROME_PATH:-$(command -v chromium-browser || command -v google-chrome || command -v chromium || command -v firefox)}\" marp --allow-local-files --browser-timeout 120 --theme-set ../css/dr-iissi.css --engine ../scripts/marp-engine.js --pdf templates.md",
+    "watch": "CHOKIDAR_USEPOLLING=1 CHROME_PATH=\"${CHROME_PATH:-$(command -v chromium-browser || command -v google-chrome || command -v chromium || command -v firefox)}\" marp --watch --allow-local-files --browser-timeout 120 --theme-set ../css/dr-iissi.css --engine ../scripts/marp-engine.js --pdf templates.md"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { pathToFileURL } = require('url');
 
 function findInBases(pkg) {
   const bases = new Set();
@@ -344,6 +345,83 @@ function preprocessVAlignBody(markdown) {
   return out.join('\n');
 }
 
+function parseThemeRelDir(markdown) {
+  if (typeof markdown !== 'string') return null;
+
+  const frontMatter = markdown.match(/^---\n([\s\S]*?)\n---(?:\n|$)/);
+  if (!frontMatter) return null;
+
+  for (const line of frontMatter[1].split('\n')) {
+    const match = line.match(/^\s*marp-theme-rel-dir\s*:\s*(.+?)\s*$/);
+    if (!match) continue;
+
+    const value = match[1].trim().replace(/^['"]|['"]$/g, '');
+    return value || null;
+  }
+
+  return null;
+}
+
+function guessMarkdownPathFromArgv() {
+  for (let i = process.argv.length - 1; i >= 0; i -= 1) {
+    const arg = process.argv[i];
+    if (!arg || arg.startsWith('-')) continue;
+    if (!/\.md(?:own)?$/i.test(arg)) continue;
+
+    const resolved = path.resolve(process.cwd(), arg);
+    if (fs.existsSync(resolved)) return resolved;
+  }
+
+  return null;
+}
+
+function buildThemeAssetBase(markdown) {
+  const themeRelDir = parseThemeRelDir(markdown);
+  if (!themeRelDir) return null;
+
+  const markdownPath = guessMarkdownPathFromArgv();
+  if (!markdownPath) return null;
+
+  const themeRoot = path.resolve(path.dirname(markdownPath), themeRelDir);
+  return {
+    root: themeRoot,
+    css: path.join(themeRoot, 'css'),
+    fonts: path.join(themeRoot, 'fonts'),
+  };
+}
+
+function absolutizeThemeAssetUrls(content, themeAssetBase) {
+  if (!content || !themeAssetBase) return content;
+
+  const cssAssetUrls = new Map([
+    ['us-title-bg.png', pathToFileURL(path.join(themeAssetBase.css, 'us-title-bg.png')).href],
+    ['us-default-bg.png', pathToFileURL(path.join(themeAssetBase.css, 'us-default-bg.png')).href],
+    ['us-footer.png', pathToFileURL(path.join(themeAssetBase.css, 'us-footer.png')).href],
+  ]);
+
+  let out = content;
+
+  for (const [asset, fileUrl] of cssAssetUrls) {
+    const escapedAsset = asset.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    out = out.replace(
+      new RegExp(`url\\((['"])${escapedAsset}\\1\\)`, 'g'),
+      `url("${fileUrl}")`
+    );
+    out = out.replace(new RegExp(`url\\(${escapedAsset}\\)`, 'g'), `url("${fileUrl}")`);
+  }
+
+  out = out.replace(
+    /url\((['"])\.\.\/fonts\/([^'")]+)\1\)/g,
+    (_, _quote, fontPath) => `url("${pathToFileURL(path.join(themeAssetBase.fonts, fontPath)).href}")`
+  );
+  out = out.replace(
+    /url\(\.\.\/fonts\/([^'")]+)\)/g,
+    (_, fontPath) => `url("${pathToFileURL(path.join(themeAssetBase.fonts, fontPath)).href}")`
+  );
+
+  return out;
+}
+
 module.exports = class MarpEngine extends Marp {
   constructor(opts = {}) {
     super({
@@ -384,6 +462,7 @@ module.exports = class MarpEngine extends Marp {
       args[0] = preprocessColumnMarkers(args[0]);
       args[0] = preprocessVAlignBody(args[0]);
     }
+    const themeAssetBase = buildThemeAssetBase(args[0]);
 
     const out = super.render(...args);
 
@@ -395,6 +474,11 @@ module.exports = class MarpEngine extends Marp {
         /<(?:span|marp-span)\b[^>]*\bkatex-display\b[^>]*>/g,
         (tag) => tag.replace(/\sdata-auto-scaling="downscale-only"/g, '')
       );
+      out.html = absolutizeThemeAssetUrls(out.html, themeAssetBase);
+    }
+
+    if (out && typeof out.css === 'string') {
+      out.css = absolutizeThemeAssetUrls(out.css, themeAssetBase);
     }
 
     return out;

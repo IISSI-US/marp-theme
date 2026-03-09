@@ -1,6 +1,7 @@
 ---
 marp: true
 theme: dr-iissi
+marp-theme-rel-dir: ..
 paginate: true
 ---
 
