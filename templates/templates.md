@@ -10,7 +10,7 @@ paginate: true
 
 ## Plantillas y patrones de maquetación Marp
 
-### Repositorio `pptx2md`
+### Referencia visual del tema
 
 ---
 
