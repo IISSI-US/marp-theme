@@ -1,0 +1,673 @@
+/* =============================================================================
+   dr-iissi.css — Tema Marp IISSI v2
+   Universidad de Sevilla
+   ============================================================================= */
+
+/* @theme dr-iissi */
+@import 'default';
+
+/* ---------------------------------------------------------------------------
+   Tipografía local (repositorio)
+   --------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('../fonts/source-sans-3/SourceSans3-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('../fonts/source-sans-3/SourceSans3-Italic-VariableFont_wght.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../fonts/lato/Lato-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../fonts/lato/Lato-Italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../fonts/lato/Lato-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../fonts/lato/Lato-BoldItalic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../fonts/roboto/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../fonts/roboto/Roboto-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('../fonts/roboto-condesed/RobotoCondensed-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('../fonts/roboto-condesed/RobotoCondensed-Italic-VariableFont_wght.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../fonts/JetBrains_Mono/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  src: url('../fonts/caveat/Caveat-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  src: url('../fonts/caveat/static/Caveat-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ---------------------------------------------------------------------------
+   Variables
+   --------------------------------------------------------------------------- */
+section {
+  --iissi-granate: #9f1732;
+  --iissi-linea:   #8c0000;
+  --iissi-fondo:   #ececec;
+  --iissi-gap:     1em;
+  --iissi-box-border: 2px solid var(--iissi-granate);
+  --iissi-box-radius: 8px;
+  --iissi-image-box-padding: 6px;
+  --iissi-formula-bg: #dff1ff;
+  --iissi-mr-bg: #e3e3e3;
+  --iissi-sql-bg: #9af3b3;
+  --iissi-col-media-max-h: calc(100vh - 250px);
+  --iissi-font-family: 'Roboto', sans-serif;
+  --iissi-code-font-family: Consolas, 'Liberation Mono', Menlo, Monaco, 'Courier New', monospace;
+  /* Fórmulas KaTeX: escalas controlables (heredan fit-*) */
+  --iissi-math-inline-scale: 1;
+  --iissi-math-display-scale: 0.80;
+
+  /* -------------------------------------------------------------------------
+     Base section
+     ------------------------------------------------------------------------- */
+  font-family: var(--iissi-font-family);
+  font-size: 34px;
+  line-height: 1.05;
+  color: var(--iissi-granate);
+  padding: 44px 72px 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  background-color: var(--iissi-fondo);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Overrides tipográficos opcionales por diapositiva (_class). */
+section.font-lato {
+  --iissi-font-family: 'Lato', sans-serif;
+}
+
+section.font-roboto {
+  --iissi-font-family: 'Roboto', sans-serif;
+}
+
+section.font-roboto-condensed {
+  --iissi-font-family: 'Roboto Condensed', sans-serif;
+}
+
+section.font-source-sans-3 {
+  --iissi-font-family: 'Source Sans 3', sans-serif;
+}
+
+section.font-caveat {
+  --iissi-font-family: 'Caveat', cursive;
+}
+
+/* ---------------------------------------------------------------------------
+   Headings
+   h1 → título principal de la transparencia
+   h2..h6 → subtítulos (misma estética, solo cambia el tamaño)
+   --------------------------------------------------------------------------- */
+section h1 {
+  font-size: 1.4em;
+  color: var(--iissi-granate);
+  border-bottom: 7px solid var(--iissi-linea);
+  padding-bottom: 0.15em;
+  margin-bottom: 0.4em;
+  margin-top: 0;
+}
+
+/* Mantener tamaño del título aunque la transparencia use fit-* */
+section:is(.fit-1, .fit-2, .fit-3, .fit-4, .fit-5, .fit-6, .fit-7, .fit-8, .fit-9, .fit-10) > h1 {
+  font-size: 47.6px;
+}
+
+section h2,
+section h3,
+section h4,
+section h5,
+section h6 {
+  color: var(--iissi-granate);
+  text-align: center;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+section h2 { font-size: 1.15em; }
+
+section h3 {
+  font-size: 1em;
+}
+
+section h4 {
+  font-size: 0.85em;
+}
+
+section h5 { font-size: 0.72em; }
+
+section h6 { font-size: 0.62em; }
+
+section .katex {
+  font-size: calc(1em * var(--iissi-math-inline-scale));
+}
+
+/* Fórmulas en bloque ($$...$$): caja visual como code/image, fondo azul claro */
+section .katex-display {
+  border: var(--iissi-box-border);
+  border-radius: var(--iissi-box-radius);
+  padding: 0.5em 0.8em;
+  background-color: var(--iissi-formula-bg);
+  font-size: calc(1em * var(--iissi-math-display-scale));
+  box-sizing: border-box;
+  width: auto;
+  max-width: none;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+section .katex-display .katex {
+  font-size: 1em;
+}
+
+/* Centrar el bloque de fórmula en su párrafo contenedor */
+section p:has(> :is(span, marp-span).katex-display) {
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer institucional (logo US — abajo izquierda)
+   --------------------------------------------------------------------------- */
+section:not(.title)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 345px;
+  height: 46px;
+  background-image: url('us-footer.png');
+  background-position: left bottom;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* ---------------------------------------------------------------------------
+   Paginación (abajo derecha)
+   --------------------------------------------------------------------------- */
+section::after {
+  content: attr(data-marpit-pagination);
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+  font-size: 0.38em;
+  color: #6d6d6d;
+}
+
+section.title::after {
+  content: none;
+  display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Layout: title
+   --------------------------------------------------------------------------- */
+section.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  background-color: #f5f3ea;
+  background-image: url('us-title-bg.png');
+  background-position: left center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* Restricción de ancho al 60% derecho para no solapar la imagen */
+section.title > * {
+  margin-left: 40%;
+  max-width: 60%;
+  text-align: center;
+}
+
+section.title h1 {
+  border-bottom: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Fondo por defecto para todas las secciones que no son title
+   --------------------------------------------------------------------------- */
+section:not(.title) {
+  background-image: url('us-default-bg.png');
+  background-position: right bottom;
+  background-size: 20% auto;
+  background-repeat: no-repeat;
+}
+
+/* ---------------------------------------------------------------------------
+   Layout: content  (agenda/índice con lista estilizada)
+   Combinar con default: _class: "default content"
+   --------------------------------------------------------------------------- */
+section.content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+section.content ul li {
+  font-size: 1em;
+  padding: 0.35em 0.6em;
+  border-left: 6px solid var(--iissi-granate);
+  background: rgba(159, 23, 50, 0.06);
+  color: var(--iissi-granate);
+}
+
+section.content ul li::before {
+  content: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Layout: fit-1 a fit-10  (ajuste de tamaño para contenido variable)
+   Uso: _class: "default fit-3" (ajusta el tamaño al 82% del original)
+   --------------------------------------------------------------------------- */
+   
+section.fit-1 {
+  font-size: 32px;
+  --iissi-fit-scale: 0.941176;
+}
+
+section.fit-2 {
+  font-size: 30px;
+  --iissi-fit-scale: 0.882353;
+}
+
+section.fit-3 {
+  font-size: 28px;
+  --iissi-fit-scale: 0.823529;
+}
+
+section.fit-4 {
+  font-size: 26px;
+  --iissi-fit-scale: 0.764706;
+}
+
+section.fit-5 {
+  font-size: 24px;
+  --iissi-fit-scale: 0.705882;
+}
+
+section.fit-6 {
+  font-size: 22px;
+  --iissi-fit-scale: 0.647059;
+}
+
+section.fit-7 {
+  font-size: 20px;
+  --iissi-fit-scale: 0.588235;
+}
+
+section.fit-8 {
+  font-size: 18px;
+  --iissi-fit-scale: 0.529412;
+}
+
+section.fit-9 {
+  font-size: 16px;
+  --iissi-fit-scale: 0.470588;
+}
+
+section.fit-10 {
+  font-size: 14px;
+  --iissi-fit-scale: 0.411765;
+}
+/* TODO: refactorizar fit-1..fit-10 para expresar la escala de forma más compacta. */
+
+/* ---------------------------------------------------------------------------
+   Layouts de 2 columnas (modelo actual por marcadores)
+   - two-col      : 50/50
+   - two-col-3-7  : 30/70
+   - two-col-7-3  : 70/30
+   Uso en markdown:
+     *** left ***
+     contenido izquierda
+     *** right ***
+     contenido derecha
+   --------------------------------------------------------------------------- */
+section:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) {
+  display: grid !important;
+  align-content: start;
+  align-items: start;
+  gap: var(--iissi-gap);
+}
+
+section.two-col:has(> .col.left, > .col.right) { grid-template-columns: 1fr 1fr; }
+section.two-col-3-7:has(> .col.left, > .col.right) { grid-template-columns: 3fr 7fr; }
+section.two-col-7-3:has(> .col.left, > .col.right) { grid-template-columns: 7fr 3fr; }
+
+section:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) > :not(h1):not(hr) {
+  width: auto;
+}
+
+section:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) > h1 {
+  grid-column: 1 / -1;
+}
+
+section:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) > hr {
+  display: none;
+}
+
+section:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) > .col {
+  min-width: 0;
+}
+
+section:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) > .col.left {
+  grid-column: 1;
+}
+
+section:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) > .col.right {
+  grid-column: 2;
+}
+
+section:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) > .col > :first-child {
+  margin-top: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Layout: three-col (modelo actual por marcadores)
+   Uso en markdown:
+     *** left ***
+     contenido izquierda
+     *** center ***
+     contenido centro
+     *** right ***
+     contenido derecha
+   --------------------------------------------------------------------------- */
+section.three-col:has(> .col.left, > .col.center, > .col.right) {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-content: start;
+  align-items: start;
+  gap: var(--iissi-gap);
+}
+
+section.three-col:has(> .col.left, > .col.center, > .col.right) > h1 {
+  grid-column: 1 / -1;
+}
+
+section.three-col:has(> .col.left, > .col.center, > .col.right) > hr {
+  display: none;
+}
+
+section.three-col:has(> .col.left, > .col.center, > .col.right) > .col {
+  min-width: 0;
+}
+
+section.three-col:has(> .col.left, > .col.center, > .col.right) > .col.left {
+  grid-column: 1;
+}
+
+section.three-col:has(> .col.left, > .col.center, > .col.right) > .col.center {
+  grid-column: 2;
+}
+
+section.three-col:has(> .col.left, > .col.center, > .col.right) > .col.right {
+  grid-column: 3;
+}
+
+section.three-col:has(> .col.left, > .col.center, > .col.right) > .col > :first-child {
+  margin-top: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Caja de imagen: borde granate, esquinas redondeadas, margen interior
+   Se aplica a imágenes en cualquier layout.
+   --------------------------------------------------------------------------- */
+section:is(.default, .two-col, .three-col, .two-col-3-7, .two-col-7-3) p:has(> img):not(:has(img.emoji)) {
+  border: var(--iissi-box-border);
+  border-radius: var(--iissi-box-radius);
+  padding: var(--iissi-image-box-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+section:is(.default, .two-col, .three-col, .two-col-3-7, .two-col-7-3) p:has(> img):not(:has(img.emoji)) img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* En layout default la imagen crece para ocupar el espacio vertical
+   disponible (flex: 1). Si hay texto antes, la imagen ocupa menos altura.
+   El dimensionado es por altura: height: 100%, width: auto. */
+section.default:not(.two-col):not(.two-col-3-7):not(.two-col-7-3) p:has(> img):not(:has(img.emoji)) {
+  flex: 1;
+  min-height: 0;
+  align-self: center;
+}
+
+section.default:not(.two-col):not(.two-col-3-7):not(.two-col-7-3) p:has(> img):not(:has(img.emoji)) img {
+  height: 100%;
+  width: auto;
+}
+
+/* En layouts de columnas, la caja debe ocupar toda la columna */
+section:is(.two-col, .three-col, .two-col-3-7, .two-col-7-3) p:has(> img):not(:has(img.emoji)) {
+  width: 100%;
+  min-height: 0;
+  align-self: start;
+  align-items: flex-start;
+}
+
+/* En columnas, ajustar por altura disponible sin recortar.
+   Aplica igual si la imagen cae en izquierda, derecha o en ambas. */
+section:is(.two-col, .three-col, .two-col-3-7, .two-col-7-3) p:has(> img):not(:has(img.emoji)) img {
+  display: block;
+  width: auto;
+  height: auto;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: var(--iissi-col-media-max-h);
+  object-fit: contain;
+}
+
+/* Emojis de Marp/Twemoji como iconos inline, sin tratamiento de caja de imagen */
+img.emoji[data-marp-twemoji] {
+  height: 1em;
+  width: 1em;
+  vertical-align: -0.12em;
+}
+
+/* Centrado vertical opcional de contenido (usar clase v-align solo cuando haga falta).
+   El título h1 permanece anclado arriba; se centra solo el cuerpo. */
+section.v-align {
+  justify-content: flex-start;
+}
+
+/* Slides de una columna (default/content): centrar el bloque de cuerpo
+   entre el h1 y el pie, usando el wrapper .v-body inyectado por engine. */
+section.v-align:not(.two-col):not(.two-col-3-7):not(.two-col-7-3):not(.three-col) > .v-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Slides de columnas por marcadores: reservar fila de título y centrar
+   verticalmente solo las columnas en el área de contenido. */
+section.v-align:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right),
+section.v-align.three-col:has(> .col.left, > .col.center, > .col.right) {
+  grid-template-rows: auto 1fr;
+  align-content: stretch;
+}
+
+section.v-align:is(.two-col, .two-col-3-7, .two-col-7-3):has(> .col.left, > .col.right) > .col,
+section.v-align.three-col:has(> .col.left, > .col.center, > .col.right) > .col {
+  align-self: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Bloques de código: base común (mr y sql)
+   Ambos renderizados por marp-engine.js con pre explícito (sin auto-scaling).
+   --------------------------------------------------------------------------- */
+:is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]) {
+  border: var(--iissi-box-border);
+  border-radius: var(--iissi-box-radius);
+  padding: 0.6em 0.8em;
+  font-size: 12pt;
+  font-family: var(--iissi-code-font-family);
+  /* Tamaño de tabulación fijo para mantener indentación consistente. */
+  tab-size: 2;
+  -moz-tab-size: 2;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+}
+
+:is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]).code-font-default {
+  font-family: Consolas, 'Liberation Mono', Menlo, Monaco, 'Courier New', monospace;
+}
+
+:is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]).code-font-jetbrains {
+  font-family: 'JetBrains Mono', 'Liberation Mono', Menlo, Monaco, 'Courier New', monospace;
+}
+
+/* En layout default, centrar horizontalmente los bloques de código */
+section.default :is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]) {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+:is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]) code {
+  color: #222;
+  background: transparent;
+  font-family: inherit;
+}
+
+/* Fondo diferenciado */
+:is(pre.language-mr, pre[data-lang="mr"]) { background-color: var(--iissi-mr-bg); }
+
+:is(pre.language-sql, pre[data-lang="sql"]) { background-color: var(--iissi-sql-bg); }
+
+/* ---------------------------------------------------------------------------
+   Resaltado mr
+   --------------------------------------------------------------------------- */
+.mr-keyword { color: #7f0018; font-weight: bold; }
+.mr-comment { color: #6f7d6f; font-style: italic; }
+.mr-null    { color: #8a4d00; }
+.mr-brace    { color: #005a9c; font-weight: bold; }
+.mr-paren    { color: #7a3e00; font-weight: bold; }
+.mr-string   { color: #880000; }
+.mr-relation { font-weight: bold; }
+
+/* ---------------------------------------------------------------------------
+   Resaltado sql (hljs)
+   --------------------------------------------------------------------------- */
+:is(pre.language-sql, pre[data-lang="sql"]) .hljs-keyword  { color: #7f0018; font-weight: bold; }
+
+:is(pre.language-sql, pre[data-lang="sql"]) .hljs-string   { color: #880000; }
+
+:is(pre.language-sql, pre[data-lang="sql"]) .hljs-number   { color: #397300; }
+
+:is(pre.language-sql, pre[data-lang="sql"]) .hljs-comment  { color: #6f7d6f; font-style: italic; }
+
+:is(pre.language-sql, pre[data-lang="sql"]) .hljs-operator { color: #444; }
+
+/* ---------------------------------------------------------------------------
+   Tablas: centradas en la diapositiva
+   --------------------------------------------------------------------------- */
+section table {
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+section th,
+section td {
+  text-align: left;
+}
