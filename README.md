@@ -1,8 +1,8 @@
 # marp-theme
 
-Tema Marp `dr-iissi` para las transparencias de IISSI.
+Shared `dr-iissi` Marp theme for the IISSI slide decks.
 
-## Estructura
+## Contents
 
 ```text
 css/
@@ -16,18 +16,111 @@ scripts/
   install-local-fonts.sh
 templates/
   templates.md
+  package.json
 ```
 
-## Uso
+## What is in this submodule
 
-Con Marp CLI:
+- Theme CSS in `css/dr-iissi.css`
+- Local image assets and local fonts
+- Custom Marp engine logic in `scripts/marp-engine.js`
+- A guide and visual regression deck in `templates/templates.md`
+
+## What you need to install
+
+Required:
+
+- Node.js
+- npm
+- Marp CLI
+- A browser supported by Marp in `PATH`
+
+Install Node.js first, because Marp CLI is distributed through npm:
 
 ```bash
-marp --theme-set ./css/dr-iissi.css --engine ./scripts/marp-engine.js slide.md --pdf
+node --version
+npm --version
 ```
 
-## Desarrollo
+Then install Marp CLI globally:
 
-- El CSS del tema es `css/dr-iissi.css`.
-- Los assets visuales y las fuentes viven en este repositorio.
-- Las plantillas de referencia están en `templates/`.
+```bash
+npm i -g @marp-team/marp-cli
+```
+
+Verify the installation:
+
+```bash
+marp --version
+```
+
+Supported browser resolution in the scripts:
+
+- `chromium-browser`
+- `google-chrome`
+- `chromium`
+- `firefox`
+
+Optional:
+
+```bash
+npm run install-fonts
+```
+
+## Runtime model
+
+The theme is not only CSS.
+
+The full rendering stack is:
+
+- Marp CLI
+- `dr-iissi.css`
+- `marp-engine.js`
+- local fonts and local background assets
+
+The engine adds behavior for:
+
+- column markers
+- `mr` code blocks
+- SQL highlighting
+- KaTeX and relational algebra macros
+- asset resolution through `marp-theme-rel-dir`
+
+## Typical usage
+
+From a repo that vendors this submodule:
+
+```bash
+marp --theme-set ./marp-theme/css/dr-iissi.css --engine ./marp-theme/scripts/marp-engine.js slide.md --pdf
+```
+
+In the slide front matter:
+
+```yaml
+---
+marp: true
+theme: dr-iissi
+marp-theme-rel-dir: ./marp-theme
+paginate: true
+---
+```
+
+Adjust `marp-theme-rel-dir` so it is relative to the markdown file being rendered.
+
+## Templates guide
+
+The reference deck lives in:
+
+- `templates/templates.md`
+
+Build it with:
+
+```bash
+npm --prefix marp-theme/templates run build
+```
+
+Watch it with:
+
+```bash
+npm --prefix marp-theme/templates run watch
+```

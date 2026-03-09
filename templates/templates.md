@@ -7,129 +7,162 @@ paginate: true
 
 <!-- _class: title -->
 
-# Guía del tema `dr-iissi` 
+# `dr-iissi` Theme Guide
 
-## Plantillas y patrones de maquetación Marp
+## Usage reference and visual regression deck
 
-### Referencia visual del tema
-
-#### David Ruiz y de esa forma quitamos
+### IISSI Marp theme
 
 ---
 
 <!-- _class: content -->
 
-# Esta guía incluye
+# What this deck is for
 
-- Sección 1. Tipografía del tema y de código
-- Sección 2. Layouts base (`default`, `content`, `three-col`, `two-col*`)
-- Sección 3. Centrado vertical (`v-align`)
-- Sección 4. Código (`mr/sql`) y fórmulas
-- Sección 5. Banco de pruebas visual (A...J)
-- Sección 6. Casos realistas reutilizables para T1...T12
-- Sección 7. Anexo mixto (K...N)
+- Learn how to use the `dr-iissi` theme in real slides.
+- See the supported layout patterns and content conventions.
+- Verify typography, code blocks, math, image framing, footer, and pagination.
+- Use the later sections as a visual regression deck after theme or engine changes.
 
 ---
+
 <!-- _class: default -->
 
-# Regla de columnas (actual)
+# Quick start
 
-Para `two-col` y variantes:
+Use the theme with Marp CLI:
 
-1. Usa `*** left ***` para iniciar columna izquierda.
-2. Usa `*** right ***` para iniciar columna derecha.
-3. Para `three-col`, añade también `*** center ***`.
-4. No uses `<hr/>` en layouts de columnas.
+```bash
+marp --theme-set ./css/dr-iissi.css --engine ./scripts/marp-engine.js slide.md --pdf
+```
 
-Opcional: añade clase `v-align` para centrar verticalmente esa slide.
+Recommended front matter in a deck that lives outside `marp-theme/`:
+
+```yaml
+---
+marp: true
+theme: dr-iissi
+marp-theme-rel-dir: ../../marp-theme
+paginate: true
+size: 16:9
+---
+```
+
+---
+
+<!-- _class: default -->
+
+# Theme-specific front matter
+
+`marp-theme-rel-dir` tells the engine where theme assets live relative to the current markdown file.
+
+- In this guide the value is `..`
+- In `iissi-1/t*/...md` files the value is `../../marp-theme`
+- Use a relative path so PDF builds stay portable across machines
+
+If the path is wrong, background images and local fonts may not resolve during render.
+
+---
+
+<!-- _class: default -->
+
+# Column marker rules
+
+For `two-col`, `two-col-3-7`, `two-col-7-3`, and `three-col`:
+
+1. Use `*** left ***` to start the left column.
+2. Use `*** right ***` to start the right column.
+3. Use `*** center ***` only in `three-col`.
+4. Do not use `<hr/>` inside column layouts.
+
+Optional: add `v-align` to vertically center the slide body.
 
 ---
 
 <!-- _class: content -->
 
-# Navegación de la guía
+# Guide map
 
-- **Sección 1. Tipografía del tema y de código**
-- Sección 2. Layouts base
-- Sección 3. Centrado vertical (`v-align`)
-- Sección 4. Código (`mr/sql`) y fórmulas
+- **Section 1. Typography and code fonts**
+- Section 2. Base layouts and images
+- Section 3. Vertical alignment
+- Section 4. `mr`, `sql`, and KaTeX
+- Section 5. Visual regression cases A-J
+- Section 6. Realistic topic examples T1-T12
+- Section 7. Mixed regression cases K-N
 
 ---
 
 <!-- _class: default font-roboto -->
 
-# Tipografía de tema: default (Roboto)
+# Theme font: default (`Roboto`)
 
-Este slide usa la fuente por defecto del tema (`Roboto`).
+This slide uses the default theme font.
 
-- Texto de prueba con acentos: áéíóú ñ
-- **Negrita de prueba**
-- *Cursiva de prueba*
-- `Código inline de prueba`
+- Accents and symbols: áéíóú ñ ç
+- **Bold sample**
+- *Italic sample*
+- `Inline code sample`
 
 ---
 
 <!-- _class: default font-lato -->
 
-# Tipografía de tema: Lato
+# Theme font override: `Lato`
 
-Este slide fuerza `Lato` a nivel de diapositiva.
+Use slide classes such as `font-lato` when a deck needs a different tone without changing the whole theme.
 
-- Texto de prueba con acentos: áéíóú ñ
-- **Negrita de prueba**
-- *Cursiva de prueba*
-- `Código inline de prueba`
+- Paragraph rhythm sample
+- **Bold sample**
+- *Italic sample*
+- `Inline code sample`
 
 ---
 
 <!-- _class: default font-roboto-condensed -->
 
-# Tipografía de tema: Roboto Condensed
+# Theme font override: `Roboto Condensed`
 
-Este slide fuerza `Roboto Condensed` a nivel de diapositiva.
+This variant is useful for denser titles or compact text blocks.
 
-- Texto de prueba con acentos: áéíóú ñ
-- **Negrita de prueba**
-- *Cursiva de prueba*
-- `Código inline de prueba`
+- Narrower letterforms
+- Good for labels and summaries
+- `Inline code sample`
 
 ---
 
 <!-- _class: default font-source-sans-3 -->
 
-# Tipografía de tema: Source Sans 3
+# Theme font override: `Source Sans 3`
 
-Este slide fuerza `Source Sans 3` a nivel de diapositiva.
+Use this slide to validate the local variable font and italic face.
 
-- Texto de prueba con acentos: áéíóú ñ
-- **Negrita de prueba**
-- *Cursiva de prueba*
-- `Código inline de prueba`
+- Normal text sample
+- *Italic sample*
+- **Bold sample**
 
 ---
 
 <!-- _class: default font-caveat -->
 
-# Tipografía de tema: Caveat
+# Theme font override: `Caveat`
 
-Este slide fuerza `Caveat` a nivel de diapositiva para ver una alternativa manuscrita.
+This slide is intentionally distinctive so font loading issues are obvious.
 
-- Texto de prueba con acentos: áéíóú ñ
-- Frase larga para inspeccionar ritmo y legibilidad en líneas extensas.
-- **Negrita de prueba**
-- *Cursiva de prueba*
-- `Código inline de prueba`
+- Handwritten tone sample
+- Long enough sentence to inspect rhythm and contrast.
+- **Bold sample**
+- *Italic sample*
 
 ---
 
 <!-- _class: default -->
 
-# Fuente de código: default (Consolas/Marp)
+# Code font: default stack
 
-Este ejemplo usa la pila monoespaciada por defecto del tema.
+Default code blocks use the theme monospace stack.
 
 ```sql default
--- Ranking de empleados por salario dentro de cada departamento
 SELECT
   d.nombre AS departamento,
   e.id_emp,
@@ -149,12 +182,11 @@ ORDER BY d.nombre, orden_salario;
 
 <!-- _class: default -->
 
-# Fuente de código: JetBrains Mono (local)
+# Code font: `JetBrains Mono`
 
-Misma estructura de código para comparar legibilidad, espaciado y peso.
+The engine supports a local JetBrains Mono variant through the fence info string.
 
 ```mr jetbrains
--- Modelo relacional de ejemplo
 Empleado(PK id_emp, nombre, salario, FK id_dept null)
 Departamento(PK id_dept, nombre AK, presupuesto)
 Proyecto(PK id_proy, nombre, FK id_dept)
@@ -174,104 +206,105 @@ ORDER BY a.horas DESC, e.nombre;
 
 <!-- _class: default -->
 
-# Cómo cambiar la fuente en bloques de código
+# Code fence selectors
 
-La selección se hace en el *fence* y la aplica `marp-engine.js`:
+Pick the code font in the fence info string:
 
-- `default` o `consolas` para la fuente monoespaciada por defecto.
-- `jetbrains` o `jb` para `JetBrains Mono` local del repositorio.
+- `default` or `consolas` for the default monospace stack
+- `jetbrains` or `jb` for `JetBrains Mono`
 
-Ejemplos:
+Examples:
 
-` ```sql default `  
-`SELECT * FROM Empleado;`  
+` ```sql default `
+`SELECT * FROM Empleado;`
 ` ``` `
 
-` ```mr jetbrains `  
-`Empleado(PK id_emp, nombre)`  
+` ```mr jetbrains `
+`Empleado(PK id_emp, nombre)`
 ` ``` `
 
 ---
 
 <!-- _class: content -->
 
-# Navegación de la guía
+# Guide map
 
-- Sección 1. Tipografía del tema y de código
-- **Sección 2. Layouts base**
-- Sección 3. Centrado vertical (`v-align`)
-- Sección 4. Código (`mr/sql`) y fórmulas
-
----
-
-<!-- _class: default -->
-
-# Layout: default
-
-Transparencia estándar con una sola columna de contenido.
-
-- Punto uno del contenido
-- Punto dos del contenido
-  - Subpunto A
-  - Subpunto B
-- Punto tres del contenido
+- Section 1. Typography and code fonts
+- **Section 2. Base layouts and images**
+- Section 3. Vertical alignment
+- Section 4. `mr`, `sql`, and KaTeX
+- Section 5. Visual regression cases A-J
+- Section 6. Realistic topic examples T1-T12
+- Section 7. Mixed regression cases K-N
 
 ---
 
 <!-- _class: default -->
 
-# Headings: h2, h3, h4
+# Layout: `default`
 
-## Esto es un h2 (centrado)
+Standard single-column content slide.
 
-### Esto es un h3 (centrado, más pequeño)
+- Main point one
+- Main point two
+- Subpoints can be nested
+- Suitable for most explanatory slides
 
-#### Esto es un h4 (centrado, aún más pequeño)
+---
 
-Texto de párrafo normal bajo los headings.
+<!-- _class: default -->
+
+# Headings: `h2`, `h3`, `h4`
+
+## This is an `h2`
+
+### This is an `h3`
+
+#### This is an `h4`
+
+Body text should remain readable below centered secondary headings.
 
 ---
 
 <!-- _class: content -->
 
-# Layout: content (agenda)
+# Layout: `content`
 
-- Introducción al tema
-- Fundamentos teóricos
-- Metodología y herramientas
-- Casos de estudio
-- Conclusiones y trabajo futuro
+- Use this style for agendas and section summaries
+- The layout is intentionally lighter than `default`
+- It works well with short, scannable bullet lists
 
 ---
-<!-- _class: default  -->
 
-# Layout: default con una imagen
+<!-- _class: default -->
 
-![](./images/ejemplo-t2-ciclos-evolutivos.png)
-
-
----
-<!-- _class: default  -->
-
-# Layout: default con una imagen y texto
-
-- Ejemplo de lista ANTES DE IMAGEn:
-  - Uno
-  - dos
-  - tres
+# Layout: `default` with a full image
 
 ![](./images/ejemplo-t2-ciclos-evolutivos.png)
 
 ---
+
+<!-- _class: default -->
+
+# Layout: `default` with text and image
+
+- Text may appear before a framed image.
+- Images should keep their box styling.
+- Spacing should remain consistent.
+
+![](./images/ejemplo-t2-ciclos-evolutivos.png)
+
+---
+
 <!-- _class: two-col -->
 
-# Layout: two-col (dos columnas)
+# Layout: `two-col`
 
 *** left ***
 
-**Columna izquierda**
+**Left column**
 
-Contenido de la primera columna.
+Content for the first half.
 
 - Item A
 - Item B
@@ -279,9 +312,9 @@ Contenido de la primera columna.
 
 *** right ***
 
-**Columna derecha**
+**Right column**
 
-Contenido de la segunda columna.
+Content for the second half.
 
 - Item D
 - Item E
@@ -291,38 +324,39 @@ Contenido de la segunda columna.
 
 <!-- _class: three-col -->
 
-# Layout: three-col (tres columnas)
+# Layout: `three-col`
 
 *** left ***
 
-**Primera columna**
+**First column**
 
-Texto de la columna 1.
+Text for column one.
 
 *** center ***
 
-**Segunda columna**
+**Second column**
 
-Texto de la columna 2.
+Text for column two.
 
 *** right ***
 
-**Tercera columna**
+**Third column**
 
-Texto de la columna 3.
+Text for column three.
 
 ---
+
 <!-- _class: three-col -->
 
-# Layout: three-col (texto + código + imagen)
+# Layout: text + code + image
 
 *** left ***
 
-Resumen rápido del bloque:
+Quick summary:
 
-- Contexto
-- Regla
-- Conclusión
+- Context
+- Rule
+- Conclusion
 
 *** center ***
 
@@ -337,13 +371,14 @@ WHERE salario > 2000;
 ![](./images/ejemplo-t7-relacion.png)
 
 ---
+
 <!-- _class: three-col v-align -->
 
-# Layout: three-col + v-align
+# Layout: `three-col v-align`
 
 *** left ***
 
-Texto centrado verticalmente.
+Vertically centered text.
 
 *** center ***
 
@@ -357,52 +392,168 @@ Cliente(PK id_cli, nombre)
 ![](./images/ejemplo-t1-proyecto-software.png)
 
 ---
-<!-- _class: content -->
 
-# Navegación de la guía
+<!-- _class: two-col-3-7 -->
 
-- Sección 1. Tipografía del tema y de código
-- Sección 2. Layouts base
-- **Sección 3. Centrado vertical (`v-align`)**
-- Sección 4. Código (`mr/sql`) y fórmulas
-
----
-<!-- _class: default v-align -->
-
-# Test v-align: default
-
-Este bloque debería aparecer centrado verticalmente en la traspa.
-
----
-<!-- _class: content v-align -->
-
-# Test v-align: content
-
-- Elemento 1
-- Elemento 2
-- Elemento 3
-
----
-<!-- _class: two-col v-align -->
-
-# Test v-align: two-col
+# Layout: `two-col-3-7`
 
 *** left ***
 
-Texto en la columna izquierda.
+Left column at 30%.
+
+Short contextual content.
+
+*** right ***
+
+The right column gets the main space.
+
+- Detailed point one
+- Detailed point two
+- Detailed point three
+
+---
+
+<!-- _class: two-col-7-3 -->
+
+# Layout: `two-col-7-3`
+
+*** left ***
+
+The left column holds the main explanation.
+
+- Main concept
+- Supporting point
+- Partial conclusion
+
+*** right ***
+
+The right column is suitable for notes or compact media.
+
+---
+
+<!-- _class: two-col -->
+
+# Layout: image and text in 50/50
+
+*** left ***
+
+Text above an image.
+
+![](./images/ejemplo-t1-proyecto-software.png)
+
+*** right ***
+
+- Feature A
+- Feature B
+
+---
+
+<!-- _class: two-col-3-7 -->
+
+# Layout: image-heavy `two-col-3-7`
+
+*** left ***
+
+![](./images/ejemplo-t6-generalizacion.png)
+
+Caption-like text below the image.
+
+*** right ***
+
+- More detailed explanation
+- Supporting note
+- Closing point
+
+---
+
+<!-- _class: two-col -->
+
+# Layout: text opposite image
+
+*** left ***
+
+Text at the left side of the image.
+
+- Feature A
+- Feature B
 
 *** right ***
 
 ![](./images/ejemplo-t2-ciclos-evolutivos.png)
 
 ---
-<!-- _class: two-col-3-7 v-align -->
 
-# Test v-align: two-col-3-7
+<!-- _class: two-col-7-3 -->
+
+# Layout: text-heavy `two-col-7-3`
 
 *** left ***
 
-Texto corto.
+Primary explanation with more horizontal room.
+
+- Point one
+- Point two
+- Point three
+
+*** right ***
+
+![](./images/ejemplo-t7-relacion.png)
+
+---
+
+<!-- _class: content -->
+
+# Guide map
+
+- Section 1. Typography and code fonts
+- Section 2. Base layouts and images
+- **Section 3. Vertical alignment**
+- Section 4. `mr`, `sql`, and KaTeX
+- Section 5. Visual regression cases A-J
+- Section 6. Realistic topic examples T1-T12
+- Section 7. Mixed regression cases K-N
+
+---
+
+<!-- _class: default v-align -->
+
+# `v-align` on `default`
+
+This block should appear vertically centered inside the slide body.
+
+---
+
+<!-- _class: content v-align -->
+
+# `v-align` on `content`
+
+- Item 1
+- Item 2
+- Item 3
+
+---
+
+<!-- _class: two-col v-align -->
+
+# `v-align` on `two-col`
+
+*** left ***
+
+Text in the left column.
+
+*** right ***
+
+![](./images/ejemplo-t2-ciclos-evolutivos.png)
+
+---
+
+<!-- _class: two-col-3-7 v-align -->
+
+# `v-align` on `two-col-3-7`
+
+*** left ***
+
+Short text.
 
 *** right ***
 
@@ -413,9 +564,10 @@ WHERE salario > 2000;
 ```
 
 ---
+
 <!-- _class: two-col-7-3 v-align -->
 
-# Test v-align: two-col-7-3
+# `v-align` on `two-col-7-3`
 
 *** left ***
 
@@ -430,134 +582,27 @@ Departamento(PK id_dept, nombre)
 
 ---
 
-<!-- _class: two-col-3-7 -->
-
-# Layout: two-col-3-7 (30% / 70%)
-
-*** left ***
-
-Columna izquierda (30%).
-
-Más contenido izquierda.
-
-*** right ***
-
-Columna derecha (70%) con más espacio para texto detallado.
-
-- Punto detallado uno
-- Punto detallado dos
-- Punto detallado tres
-
----
-
-<!-- _class: two-col-7-3 -->
-
-# Layout: two-col-7-3 (70% / 30%)
-
-*** left ***
-
-Columna izquierda (70%) con el contenido principal.
-
-- Descripción larga del concepto principal
-- Más información relevante
-- Conclusión parcial
-
-*** right ***
-
-Columna derecha (30%).
-
-Notas complementarias.
-
----
-
-<!-- _class: two-col -->
-
-# Layout: two-col (50/50)
-
-*** left ***
-
-Texto a la arriba de la imagen.
-
-![](./images/ejemplo-t1-proyecto-software.png)
-
-*** right ***
-
-- Característica A
-- Característica B
-
----
-
-<!-- _class: two-col-3-7 -->
-
-# Layout: two-col-3-7 (30% img / 70% texto)
-
-*** left ***
-
-![](./images/ejemplo-t6-generalizacion.png)
-
-Texto debajo de la imagen
-
-*** right ***
-
-- Punto uno con explicación detallada
-- Punto dos con más información
-- Punto tres
-
----
-<!-- _class: two-col -->
-
-# Layout: two-col (50/50)
-
-*** left ***
-
-Texto a la izquierda de la imagen.
-
-- Característica A
-- Característica B
-
-*** right ***
-
-![](./images/ejemplo-t2-ciclos-evolutivos.png)
-
----
-
-<!-- _class: two-col-7-3 -->
-
-# Layout: two-col-7-3 (70% texto / 30% img)
-
-*** left ***
-
-Texto principal con más espacio.
-
-- Punto uno
-- Punto dos
-- Punto tres
-
-*** right ***
-
-![](./images/ejemplo-t7-relacion.png)
-
----
-
 <!-- _class: content -->
 
-# Navegación de la guía
+# Guide map
 
-- Sección 1. Tipografía del tema y de código
-- Sección 2. Layouts base
-- Sección 3. Centrado vertical (`v-align`)
-- **Sección 4. Código (`mr/sql`) y fórmulas**
+- Section 1. Typography and code fonts
+- Section 2. Base layouts and images
+- Section 3. Vertical alignment
+- **Section 4. `mr`, `sql`, and KaTeX**
+- Section 5. Visual regression cases A-J
+- Section 6. Realistic topic examples T1-T12
+- Section 7. Mixed regression cases K-N
 
 ---
 
 <!-- _class: default -->
 
-# Bloques de código: mr (modelo relacional)
+# `mr` code blocks
 
-Escenario mínimo con claves y restricciones para validar resaltado en `mr`.
+Minimal relational-model sample used to validate custom highlighting.
 
 ```mr
--- Catálogo base de RRHH
 Empleado(PK id_emp, nombre, apellidos, salario, FK id_dept null)
 Departamento(PK id_dept, nombre AK, presupuesto)
 Proyecto(PK id_proy, nombre, FK id_dept)
@@ -568,9 +613,9 @@ Asignacion(PK id_emp, PK id_proy, horas, fecha_inicio)
 
 <!-- _class: default -->
 
-# Bloques de código: sql
+# `sql` code blocks
 
-Consulta más larga para revisar sangrado, saltos de línea y legibilidad.
+Longer SQL sample used to inspect indentation, wrapping, and readability.
 
 ```sql
 SELECT
@@ -589,7 +634,7 @@ ORDER BY d.nombre, e.salario DESC, e.nombre;
 
 <!-- _class: two-col-3-7 -->
 
-# mr + sql combinados en two-col-3-7
+# `mr` + `sql` in columns
 
 *** left ***
 
@@ -616,61 +661,55 @@ ORDER BY total_horas DESC, e.nombre;
 ```
 
 ---
-<!-- _class: content -->
 
-# Navegación de la guía
-
-- Sección 1. Tipografía del tema y de código
-- Sección 2. Layouts base
-- Sección 3. Centrado vertical (`v-align`)
-- **Sección 4. Código (`mr/sql`) y fórmulas**
-- Sección 5. Banco de pruebas visual (A...J)
-- Sección 6. Casos realistas (T1...T12)
-- Sección 7. Anexo mixto (K...N)
-
----
 <!-- _class: default -->
-# Fórmulas
+
+# KaTeX formulas
 
 $$
-\Proj_{\text{columnas}}\!\left(\Sel_{\text{condicion}}\!\left(T_1 \times T_2 \times \cdots \times T_n\right)\right)
+\Proj_{\text{columns}}\!\left(\Sel_{\text{condition}}\!\left(T_1 \times T_2 \times \cdots \times T_n\right)\right)
 $$
+
 ```sql
-SELECT < lista de columnas >
-	FROM    < T1, T2,.. ,Tn >
-	WHERE  < condición >
+SELECT <column list>
+FROM <T1, T2, ..., Tn>
+WHERE <condition>
 ```
 
 $$
-\Proj_{\text{nombre},\text{salario}}\!\left(\Sel_{\text{salario}<2000}(Empleados)\right)
+\Proj_{\text{name},\text{salary}}\!\left(\Sel_{\text{salary}<2000}(Empleados)\right)
 $$
+
 ```sql
 SELECT nombre, salario
 FROM Empleados
 WHERE salario < 2000;
 ```
+
 $$
 \Group^{\text{P.de},\,\mathrm{count}(\text{Ped.id})}_{\text{P.de}}\!\left(Ped \NatJoin P\right)
 $$
 
 ---
+
 <!-- _class: default -->
-# Mini tutorial: macros AR (KaTeX)
 
-Escribe las fórmulas en bloque con `$$ ... $$` y usa estas macros:
+# Algebra macros reference
 
-- `\Proj_{...}` proyección
-- `\Sel_{...}` selección
-- `\Ren_{...}` renombrado
-- `\Group^{...}_{...}` agrupación/aggregación
-- `\NatJoin`, `\JoinBy{...}` joins
-- `\Union`, `\Inter`, `\Diff` operadores de conjuntos
+Write display formulas with `$$ ... $$` and use:
+
+- `\Proj_{...}` for projection
+- `\Sel_{...}` for selection
+- `\Ren_{...}` for renaming
+- `\Group^{...}_{...}` for grouping and aggregation
+- `\NatJoin`, `\JoinBy{...}` for joins
+- `\Union`, `\Inter`, `\Diff` for set operators
 
 ---
-<!-- _class: default -->
-# Mini tutorial: macros AR (KaTeX)
 
-Ejemplos de escritura:
+<!-- _class: default -->
+
+# Algebra macros source
 
 ```tex
 \Proj_{nombre,salario}(Empleados)
@@ -681,10 +720,10 @@ Ejemplos de escritura:
 ```
 
 ---
-<!-- _class: default -->
-# Mini tutorial: macros AR (KaTeX) 
 
-Renderizado:
+<!-- _class: default -->
+
+# Algebra macros rendered
 
 $$
 \Proj_{\text{nombre},\text{salario}}(Empleados)
@@ -703,44 +742,52 @@ Emp \Union Dept,\quad Emp \Inter Dept,\quad Emp \Diff Dept
 $$
 
 ---
+
 <!-- _class: default -->
-# Mini tutorial: caracteres especiales / iconos (win + .)
 
-Ejemplo de flechas ➡️ ⬅️ 
+# Special characters and icons
 
-Ejemplo de iconos: 🎯🍽️🍴🧾
+Arrow examples: ➡️ ⬅️
 
-Ejemplo de AR: π σ ρ ≥ γ ∧ ∨ 
+Icon examples: 🎯🍽️🍴🧾
+
+Algebra symbols: π σ ρ ≥ γ ∧ ∨
 
 ---
+
 <!-- _class: content -->
 
-# Navegación de la guía
+# Guide map
 
-- Sección 1. Tipografía del tema y de código
-- Sección 2. Layouts base
-- Sección 3. Centrado vertical (`v-align`)
-- Sección 4. Código (`mr/sql`) y fórmulas
-- **Sección 5. Banco de pruebas visual (A...J)**
-- Sección 6. Casos realistas (T1...T12)
-- Sección 7. Anexo mixto (K...N)
+- Section 1. Typography and code fonts
+- Section 2. Base layouts and images
+- Section 3. Vertical alignment
+- Section 4. `mr`, `sql`, and KaTeX
+- **Section 5. Visual regression cases A-J**
+- Section 6. Realistic topic examples T1-T12
+- Section 7. Mixed regression cases K-N
 
 ---
+
 <!-- _class: default -->
-# Test de columnas: imágenes + texto
 
-Objetivo: validar que NO haya recorte en columnas.
+# Visual regression coverage A-J
 
-Casos cubiertos:
+These slides are intended as regression probes.
 
-- Imagen en izquierda / derecha / ambas columnas.
-- Texto arriba, debajo y arriba+debajo de la imagen.
-- Layouts `two-col-3-7` y `two-col-7-3`.
-- Casos mixtos `imagen + bloque de código`.
+They cover:
+
+- image in left, right, or both columns
+- text above and below framed images
+- `two-col`, `two-col-3-7`, and `two-col-7-3`
+- mixed cases with code and images
+- image sizing and clipping behavior inside columns
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# Test A — Imagen izquierda (solo imagen)
+
+# Test A: left image only
 
 *** left ***
 
@@ -748,112 +795,126 @@ Casos cubiertos:
 
 *** right ***
 
-Texto normal en la columna derecha para forzar reparto de altura.
+Regular text in the right column to force height distribution.
 
-- Línea 1
-- Línea 2
-- Línea 3
+- Line 1
+- Line 2
+- Line 3
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# Test B — Imagen izquierda + texto arriba
+
+# Test B: left image with text above
 
 *** left ***
 
-Texto arriba (izquierda).
+Text above the image.
 
 ![](images/ejemplo-t1-proyecto-software.png)
 
 *** right ***
 
-Columna derecha de control.
+Control content in the right column.
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# Test C — Imagen izquierda + texto debajo
+
+# Test C: left image with text below
 
 *** left ***
 
 ![](images/ejemplo-t1-proyecto-software.png)
 
-Texto debajo (izquierda).
+Text below the image.
 
 *** right ***
 
-Columna derecha de control.
+Control content in the right column.
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# Test D — Imagen izquierda + texto arriba y debajo
+
+# Test D: left image with text above and below
 
 *** left ***
 
-Texto arriba (izquierda).
+Text above the image.
 
 ![](images/ejemplo-t1-proyecto-software.png)
 
-Texto debajo (izquierda).
+Text below the image.
 
 *** right ***
 
-Columna derecha de control.
+Control content in the right column.
 
 ---
+
 <!-- _class: two-col-7-3 -->
-# Test E — Imagen derecha (solo imagen)
+
+# Test E: right image only
 
 *** left ***
 
-Texto normal en la columna izquierda para forzar reparto de altura.
+Regular text in the left column to force height distribution.
 
-- Línea 1
-- Línea 2
-- Línea 3
-- Línea 4
+- Line 1
+- Line 2
+- Line 3
+- Line 4
 
 *** right ***
 
 ![](images/ejemplo-t2-ciclos-evolutivos.png)
 
 ---
+
 <!-- _class: two-col-7-3 -->
-# Test F — Imagen derecha + texto arriba y debajo
+
+# Test F: right image with text above and below
 
 *** left ***
 
-Texto en la izquierda.
+Text on the left.
 
 *** right ***
 
-Texto arriba (derecha).
+Text above the image.
 
 ![](images/ejemplo-t2-ciclos-evolutivos.png)
 
-Texto debajo (derecha).
+Text below the image.
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# Test G — Imagen en ambas columnas
+
+# Test G: image in both columns
 
 *** left ***
 
 ![](images/ejemplo-t1-proyecto-software.png)
 
-Texto debajo (izquierda).
+Text below the left image.
 
 *** right ***
 
-Texto arriba (derecha).
+Text above the right image.
 
 ![](images/ejemplo-t2-ciclos-evolutivos.png)
 
 ---
+
 <!-- _class: two-col-7-3 -->
-# Test H — Imagen en ambas columnas (invertido)
+
+# Test H: image in both columns, inverted
 
 *** left ***
 
-Texto arriba (izquierda).
+Text above the left image.
 
 ![](images/ejemplo-t7-relacion.png)
 
@@ -861,96 +922,108 @@ Texto arriba (izquierda).
 
 ![](images/ejemplo-t1-proyecto-software.png)
 
-Texto debajo (derecha).
+Text below the right image.
 
 ---
+
 <!-- _class: two-col -->
-# Test I — two-col 50/50, dos imágenes + texto
+
+# Test I: 50/50 with two images and text
 
 *** left ***
 
-Texto arriba (izquierda).
+Text above the left image.
 
 ![](images/ejemplo-t7-relacion.png)
 
-Texto debajo (izquierda).
+Text below the left image.
 
 *** right ***
 
-Texto arriba (derecha).
+Text above the right image.
 
 ![](images/ejemplo-t2-ciclos-evolutivos.png)
 
-Texto debajo (derecha).
+Text below the right image.
 
 ---
+
 <!-- _class: two-col -->
-# Test J — two-col 50/50, dos imágenes + texto (invertido)
+
+# Test J: 50/50 with two images and text, inverted
 
 *** left ***
 
-Texto arriba (izquierda).
+Text above the left image.
 
 ![](images/ejemplo-t2-ciclos-evolutivos.png)
 
-Texto debajo (izquierda).
+Text below the left image.
 
 *** right ***
 
-Texto arriba (derecha).
+Text above the right image.
 
 ![](images/ejemplo-t1-proyecto-software.png)
 
-Texto debajo (derecha).
+Text below the right image.
 
 ---
+
 <!-- _class: content -->
 
-# Navegación de la guía
+# Guide map
 
-- Sección 1. Tipografía del tema y de código
-- Sección 2. Layouts base
-- Sección 3. Centrado vertical (`v-align`)
-- Sección 4. Código (`mr/sql`) y fórmulas
-- Sección 5. Banco de pruebas visual (A...J)
-- **Sección 6. Casos realistas (T1...T12)**
-- Sección 7. Anexo mixto (K...N)
+- Section 1. Typography and code fonts
+- Section 2. Base layouts and images
+- Section 3. Vertical alignment
+- Section 4. `mr`, `sql`, and KaTeX
+- Section 5. Visual regression cases A-J
+- **Section 6. Realistic topic examples T1-T12**
+- Section 7. Mixed regression cases K-N
 
 ---
+
 <!-- _class: default -->
-# Casos realistas T1–T12 (plantillas base)
 
-Objetivo: tener transparencias de referencia con contenido realista de los temas.
+# Realistic topic examples T1-T12
 
-Cobertura:
-- Slides con imagen completa.
-- Slides en `two-col`, `two-col-3-7` y `two-col-7-3`.
-- Bloques de código `mr/sql`.
-- Fórmulas (KaTeX / AR).
+These slides are not only usage examples.
+
+They also validate that the theme remains usable with realistic content taken from the course topics:
+
+- image-driven slides
+- asymmetric columns
+- `mr` and `sql` blocks
+- formulas and diagrams
 
 ---
+
 <!-- _class: two-col -->
-# T1 · Introducción al software
+
+# T1: software fundamentals
 
 *** left ***
 
-La crisis del software aparece cuando:
+The software crisis appears when:
 
-- aumenta el tamaño de los proyectos,
-- crece la complejidad técnica,
-- no hay procesos de ingeniería claros.
+- projects become larger,
+- technical complexity grows,
+- engineering processes remain unclear.
 
 *** right ***
 
-![](../t1-introduccion-a-la-ingenieria-del-software/images/el-software-01.png)
+![](../../iissi-1/t1-introduccion-a-la-ingenieria-del-software/images/el-software-01.png)
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# T2 · Metodología Scrum
+
+# T2: Scrum overview
 
 *** left ***
 
-Roles y artefactos principales:
+Main roles and artifacts:
 
 - `Product Owner`
 - `Scrum Master`
@@ -958,67 +1031,79 @@ Roles y artefactos principales:
 
 *** right ***
 
-![](../t2-el-ciclo-de-vida-del-software/images/metodologia-scrum-01.png)
+![](../../iissi-1/t2-el-ciclo-de-vida-del-software/images/metodologia-scrum-01.png)
 
 ---
+
 <!-- _class: default -->
-# T3 · Componentes de un SI
 
-Un sistema de información combina personas, procesos, datos y tecnología.
+# T3: information system components
 
-![](../t3-introduccion-a-los-sistemas-de-informacion/images/componentes-de-un-sistema-de-informacion-01.png)
+An information system combines people, processes, data, and technology.
+
+![](../../iissi-1/t3-introduccion-a-los-sistemas-de-informacion/images/componentes-de-un-sistema-de-informacion-01.png)
 
 ---
+
 <!-- _class: default -->
-# T4 · Protección de datos
 
-Panorama global de normativas de protección de datos.
+# T4: data protection
 
-![](../t4-legislacion/images/proteccion-datos-en-el-mundo-01.jpg)
+Global overview of data protection regulation.
+
+![](../../iissi-1/t4-legislacion/images/proteccion-datos-en-el-mundo-01.jpg)
 
 ---
+
 <!-- _class: two-col-7-3 -->
-# T5 · Historias de usuario
+
+# T5: user stories
 
 *** left ***
 
-Formato base:
+Base structure:
 
-> Como `<rol>`, quiero `<objetivo>` para `<beneficio>`.
+> As a `<role>`, I want `<goal>` so that `<benefit>`.
 
-Criterios de aceptación:
+Acceptance criteria should be:
 
-- medibles,
-- verificables,
-- orientados al valor.
+- measurable,
+- verifiable,
+- value-oriented.
 
 *** right ***
 
-![](../t5-requisitos-para-sistemas-de-informacion/images/historias-de-usuario-01.png)
+![](../../iissi-1/t5-requisitos-para-sistemas-de-informacion/images/historias-de-usuario-01.png)
 
 ---
+
 <!-- _class: two-col -->
-# T6 · Modelo conceptual UML
+
+# T6: UML conceptual model
 
 *** left ***
 
-Notación de clases, atributos y asociaciones en UML.
+Class, attribute, and association notation in UML.
 
 *** right ***
 
-![](../t6-introduccion-al-modelado-conceptual/images/ejemplo-de-clases-uml-01.png)
+![](../../iissi-1/t6-introduccion-al-modelado-conceptual/images/ejemplo-de-clases-uml-01.png)
 
 ---
+
 <!-- _class: default -->
-# T7 · Dependencias funcionales
 
-Grafo para analizar claves candidatas y normalización.
+# T7: functional dependencies
 
-![](../t7-introduccion-a-las-bbdd-y-al-mr/puml/t8-grafo-dependencias-funcionales.svg)
+Dependency graph used to reason about candidate keys and normalization.
+
+![](../../iissi-1/t7-introduccion-a-las-bbdd-y-al-mr/puml/t8-grafo-dependencias-funcionales.svg)
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# T8 · Transformación MC → MR (1:n)
+
+# T8: conceptual-to-relational mapping
 
 *** left ***
 
@@ -1029,11 +1114,13 @@ Empleado(id_emp, nombre, FK id_dep)
 
 *** right ***
 
-![](../t8-transformacion-de-mc-en-mr/puml/transformacion-asociacion-1n.svg)
+![](../../iissi-1/t8-transformacion-de-mc-en-mr/puml/transformacion-asociacion-1n.svg)
 
 ---
+
 <!-- _class: default -->
-# T9 · Álgebra relacional (join)
+
+# T9: relational algebra join
 
 $$
 \Proj_{\text{nombre},\text{salario}}
@@ -1042,11 +1129,13 @@ $$
 \right)
 $$
 
-![](../t9-introduccion-al-algebra-relacional/images/join.png)
+![](../../iissi-1/t9-introduccion-al-algebra-relacional/images/join.png)
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# T10 · SQL DDL + modelo
+
+# T10: SQL DDL and model
 
 *** left ***
 
@@ -1059,11 +1148,13 @@ CREATE TABLE departamento (
 
 *** right ***
 
-![](../t10-introduccion-a-sql/puml/employees-mc.svg)
+![](../../iissi-1/t10-introduccion-a-sql/puml/employees-mc.svg)
 
 ---
+
 <!-- _class: two-col -->
-# T11 · Procedimientos almacenados
+
+# T11: stored procedures
 
 *** left ***
 
@@ -1079,15 +1170,17 @@ DELIMITER ;
 
 *** right ***
 
-![](../t11-sql-avanzado/images/sintaxis-procedimientos.png)
+![](../../iissi-1/t11-sql-avanzado/images/sintaxis-procedimientos.png)
 
 ---
+
 <!-- _class: two-col-7-3 -->
-# T12 · Estados de transacción
+
+# T12: transaction states
 
 *** left ***
 
-Estados típicos en el SGBD:
+Typical DBMS states:
 
 - `Active`
 - `Partially_Committed`
@@ -1097,24 +1190,27 @@ Estados típicos en el SGBD:
 
 *** right ***
 
-![](../t12-gestion-de-transacciones/puml/estados_transaccion_sgbd.svg)
+![](../../iissi-1/t12-gestion-de-transacciones/puml/estados_transaccion_sgbd.svg)
 
 ---
+
 <!-- _class: content -->
 
-# Navegación de la guía
+# Guide map
 
-- Sección 1. Tipografía del tema y de código
-- Sección 2. Layouts base
-- Sección 3. Centrado vertical (`v-align`)
-- Sección 4. Código (`mr/sql`) y fórmulas
-- Sección 5. Banco de pruebas visual (A...J)
-- Sección 6. Casos realistas (T1...T12)
-- **Sección 7. Anexo mixto (K...N)**
+- Section 1. Typography and code fonts
+- Section 2. Base layouts and images
+- Section 3. Vertical alignment
+- Section 4. `mr`, `sql`, and KaTeX
+- Section 5. Visual regression cases A-J
+- Section 6. Realistic topic examples T1-T12
+- **Section 7. Mixed regression cases K-N**
 
 ---
+
 <!-- _class: two-col-3-7 -->
-# Test K — Imagen izquierda + código derecha
+
+# Test K: left image with right code
 
 *** left ***
 
@@ -1123,27 +1219,28 @@ Estados típicos en el SGBD:
 *** right ***
 
 ```mr
--- Intensión relacional
 Departamentos = {departamentoId, nombreDep, localidad}
-	PK(departamentoId)
-	AK(nombreDep, localidad)
+  PK(departamentoId)
+  AK(nombreDep, localidad)
 
 Empleados = {empleadoId, departamentoId, jefeId,
-   nombre, salario, fechaInicial, fechaFinal, comision}
-	PK(empleadoId)
-	FK(departamentoId)/Departamentos
-	FK(jefeId)/Empleados
+  nombre, salario, fechaInicial, fechaFinal, comision}
+  PK(empleadoId)
+  FK(departamentoId)/Departamentos
+  FK(jefeId)/Empleados
 ```
 
-Con algo de código por debajo.
+Additional text below the code block.
 
 ---
+
 <!-- _class: two-col-7-3 -->
-# Test L — Código izquierda + imagen derecha
+
+# Test L: left code with right image
 
 *** left ***
 
-Texto arriba (izquierda).
+Text above the code.
 
 ```sql
 CREATE TABLE cuentas (
@@ -1154,42 +1251,46 @@ CREATE TABLE cuentas (
 );
 ```
 
-Texto debajo (izquierda).
+Text below the code.
 
 *** right ***
 
 ![](images/ejemplo-t7-relacion.png)
 
 ---
+
 <!-- _class: two-col -->
-# Test M — two-col 50/50, imagen + código
+
+# Test M: 50/50 image and code
 
 *** left ***
 
-Texto arriba (izquierda).
+Text above the image.
 
 ![](images/ejemplo-t2-ciclos-evolutivos.png)
 
-Texto debajo (izquierda).
+Text below the image.
 
 *** right ***
 
-Texto arriba (derecha).
+Text above the code.
 
 ```mr
 Pedido(id_ped, fecha, FK id_cli)
 Cliente(id_cli, nombre, ciudad)
 ```
 
-Texto debajo (derecha).
+Text below the code.
 
 ---
+
 <!-- _class: two-col -->
-# Test N — two-col 50/50, código + imagen (invertido)
+
+# Test N: 50/50 code and image, inverted
 
 *** left ***
 
-Texto arriba (izquierda).
+Text above the code.
 
 ```sql
 SELECT e.nombre, d.nombre
@@ -1197,12 +1298,12 @@ FROM Empleado e
 JOIN Departamento d ON d.id_dept = e.id_dept;
 ```
 
-Texto debajo (izquierda).
+Text below the code.
 
 *** right ***
 
-Texto arriba (derecha).
+Text above the image.
 
 ![](images/ejemplo-t1-proyecto-software.png)
 
-Texto debajo (derecha).
+Text below the image.
