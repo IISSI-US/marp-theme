@@ -112,6 +112,7 @@ Adjust `marp-theme-rel-dir` so it is relative to the markdown file being rendere
 The reference deck lives in:
 
 - `templates/templates.md`
+- `templates/run-marp.js` is the portable launcher used by the local `build` and `watch` scripts
 
 Build it with:
 
@@ -124,3 +125,10 @@ Watch it with:
 ```bash
 npm --prefix marp-theme/templates run watch
 ```
+
+Implementation note:
+
+- the templates scripts no longer rely on POSIX-style inline environment variables
+- `run-marp.js` resolves `CHROME_PATH` in a cross-platform way
+- `CHOKIDAR_USEPOLLING=1` is enabled automatically only for WSL watch mode
+- this avoids the previous failure mode on native Windows shells
