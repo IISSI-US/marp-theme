@@ -135,6 +135,10 @@ section {
   --iissi-formula-bg: #dff1ff;
   --iissi-mr-bg: #e3e3e3;
   --iissi-sql-bg: #9af3b3;
+  --iissi-python-bg: #dceeff;
+  --iissi-javascript-bg: #fff2a8;
+  --iissi-html-bg: #ffd9cc;
+  --iissi-css-bg: #d9f5e4;
   --iissi-col-media-max-h: calc(100vh - 250px);
   --iissi-font-family: 'Roboto', sans-serif;
   --iissi-code-font-family: Consolas, 'Liberation Mono', Menlo, Monaco, 'Courier New', monospace;
@@ -591,10 +595,23 @@ section.v-align.three-col:has(> .col.left, > .col.center, > .col.right) > .col {
 }
 
 /* ---------------------------------------------------------------------------
-   Bloques de código: base común (mr y sql)
+   Bloques de código: base común
    Ambos renderizados por marp-engine.js con pre explícito (sin auto-scaling).
    --------------------------------------------------------------------------- */
-:is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]) {
+:is(
+  pre.language-mr,
+  pre[data-lang="mr"],
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) {
   border: var(--iissi-box-border);
   border-radius: var(--iissi-box-radius);
   padding: 0.6em 0.8em;
@@ -608,21 +625,73 @@ section.v-align.three-col:has(> .col.left, > .col.center, > .col.right) > .col {
   max-width: 100%;
 }
 
-:is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]).code-font-default {
+:is(
+  pre.language-mr,
+  pre[data-lang="mr"],
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+).code-font-default {
   font-family: Consolas, 'Liberation Mono', Menlo, Monaco, 'Courier New', monospace;
 }
 
-:is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]).code-font-jetbrains {
+:is(
+  pre.language-mr,
+  pre[data-lang="mr"],
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+).code-font-jetbrains {
   font-family: 'JetBrains Mono', 'Liberation Mono', Menlo, Monaco, 'Courier New', monospace;
 }
 
 /* En layout default, centrar horizontalmente los bloques de código */
-section.default :is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]) {
+section.default :is(
+  pre.language-mr,
+  pre[data-lang="mr"],
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) {
   margin-left: auto;
   margin-right: auto;
 }
 
-:is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[data-lang="sql"]) code {
+:is(
+  pre.language-mr,
+  pre[data-lang="mr"],
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) code {
   color: #222;
   background: transparent;
   font-family: inherit;
@@ -632,6 +701,14 @@ section.default :is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[
 :is(pre.language-mr, pre[data-lang="mr"]) { background-color: var(--iissi-mr-bg); }
 
 :is(pre.language-sql, pre[data-lang="sql"]) { background-color: var(--iissi-sql-bg); }
+
+:is(pre.language-python, pre[data-lang="python"]) { background-color: var(--iissi-python-bg); }
+
+:is(pre.language-javascript, pre[data-lang="javascript"]) { background-color: var(--iissi-javascript-bg); }
+
+:is(pre.language-html, pre[data-lang="html"]) { background-color: var(--iissi-html-bg); }
+
+:is(pre.language-css, pre[data-lang="css"]) { background-color: var(--iissi-css-bg); }
 
 /* ---------------------------------------------------------------------------
    Resaltado mr
@@ -645,17 +722,168 @@ section.default :is(pre.language-mr, pre[data-lang="mr"], pre.language-sql, pre[
 .mr-relation { font-weight: bold; }
 
 /* ---------------------------------------------------------------------------
-   Resaltado sql (hljs)
+   Resaltado hljs
    --------------------------------------------------------------------------- */
-:is(pre.language-sql, pre[data-lang="sql"]) .hljs-keyword  { color: #7f0018; font-weight: bold; }
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-keyword,
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-selector-tag,
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-tag .hljs-name,
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-title.class_ {
+  color: #7f0018;
+  font-weight: bold;
+}
 
-:is(pre.language-sql, pre[data-lang="sql"]) .hljs-string   { color: #880000; }
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-string,
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-attr,
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-attribute {
+  color: #880000;
+}
 
-:is(pre.language-sql, pre[data-lang="sql"]) .hljs-number   { color: #397300; }
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-number,
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-literal {
+  color: #397300;
+}
 
-:is(pre.language-sql, pre[data-lang="sql"]) .hljs-comment  { color: #6f7d6f; font-style: italic; }
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-comment {
+  color: #6f7d6f;
+  font-style: italic;
+}
 
-:is(pre.language-sql, pre[data-lang="sql"]) .hljs-operator { color: #444; }
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-operator,
+:is(
+  pre.language-sql,
+  pre[data-lang="sql"],
+  pre.language-python,
+  pre[data-lang="python"],
+  pre.language-javascript,
+  pre[data-lang="javascript"],
+  pre.language-html,
+  pre[data-lang="html"],
+  pre.language-css,
+  pre[data-lang="css"]
+) .hljs-punctuation {
+  color: #444;
+}
 
 /* ---------------------------------------------------------------------------
    Tablas: centradas en la diapositiva

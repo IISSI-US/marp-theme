@@ -439,17 +439,18 @@ module.exports = class MarpEngine extends Marp {
         const info = (token.info || '').trim();
         const lang = info.split(/\s+/)[0];
         const codeFontClass = codeFontClassFromInfo(info);
+        const hljsLanguages = new Set(['sql', 'python', 'javascript', 'html', 'css']);
 
         if (lang === 'mr') {
           const html = highlightMr(token.content);
           return `<pre class="language-mr${codeFontClass}" data-lang="mr"><code class="language-mr">${html}</code></pre>\n`;
         }
 
-        if (lang === 'sql') {
+        if (hljsLanguages.has(lang)) {
           const html = hljs
-            ? hljs.highlight(token.content, { language: 'sql' }).value
+            ? hljs.highlight(token.content, { language: lang }).value
             : escapeHtml(token.content);
-          return `<pre class="language-sql${codeFontClass}" data-lang="sql"><code class="language-sql">${html}</code></pre>\n`;
+          return `<pre class="language-${lang}${codeFontClass}" data-lang="${lang}"><code class="language-${lang}">${html}</code></pre>\n`;
         }
 
         return defaultFence(tokens, idx, options, env, self);

@@ -632,6 +632,39 @@ ORDER BY d.nombre, e.salario DESC, e.nombre;
 
 ---
 
+<!-- _class: default -->
+
+# `python`, `javascript`, `html`, and `css` code blocks
+
+Same code-block treatment as `mr` and `sql`, with distinct background colors.
+
+```python
+def salario_neto(bruto, retencion=0.15):
+  return round(bruto * (1 - retencion), 2)
+```
+
+```javascript
+const empleados = datos.filter((e) => e.salario > 30000);
+console.log(empleados.map((e) => e.nombre));
+```
+
+```html
+<section class="empleados">
+  <h2>Departamento</h2>
+  <p>Listado actualizado</p>
+</section>
+```
+
+```css
+.empleados {
+  border: 2px solid #9f1732;
+  padding: 0.75rem 1rem;
+  background: #fff;
+}
+```
+
+---
+
 <!-- _class: two-col-3-7 -->
 
 # `mr` + `sql` in columns
