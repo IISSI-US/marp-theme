@@ -207,6 +207,7 @@ function preprocessColumnMarkers(markdown) {
       if (/^\*\*\*\s+(left|izq(?:uierda)?)\s+\*\*\*$/i.test(trimmed)) {
         closeCol();
         out.push('<div class="col left">');
+        out.push('');
         openCol = 'left';
         continue;
       }
@@ -214,6 +215,7 @@ function preprocessColumnMarkers(markdown) {
       if (/^\*\*\*\s+(right|rigut|der(?:echa)?)\s+\*\*\*$/i.test(trimmed)) {
         closeCol();
         out.push('<div class="col right">');
+        out.push('');
         openCol = 'right';
         continue;
       }
@@ -221,6 +223,7 @@ function preprocessColumnMarkers(markdown) {
       if (/^\*\*\*\s+(center|centro)\s+\*\*\*$/i.test(trimmed)) {
         closeCol();
         out.push('<div class="col center">');
+        out.push('');
         openCol = 'center';
         continue;
       }

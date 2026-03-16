@@ -77,6 +77,8 @@ For `two-col`, `two-col-3-7`, `two-col-7-3`, and `three-col`:
 
 Optional: add `v-align` to vertically center the slide body.
 
+The engine inserts the needed blank line after each column marker automatically, so the next block can start immediately.
+
 ---
 
 <!-- _class: content -->
