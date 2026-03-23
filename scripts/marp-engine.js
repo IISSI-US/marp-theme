@@ -382,11 +382,23 @@ function buildThemeAssetBase(markdown) {
   const themeRelDir = parseThemeRelDir(markdown);
   if (!themeRelDir) return null;
 
+  const assetMode = (process.env.MARP_THEME_ASSET_MODE || 'file').trim();
+  const assetBaseOverride = (process.env.MARP_THEME_ASSET_BASE || '').trim();
+
+  if (assetMode === 'relative') {
+    return {
+      mode: 'relative',
+      css: path.posix.join(assetBaseOverride || themeRelDir, 'css'),
+      fonts: path.posix.join(assetBaseOverride || themeRelDir, 'fonts'),
+    };
+  }
+
   const markdownPath = guessMarkdownPathFromArgv();
   if (!markdownPath) return null;
 
   const themeRoot = path.resolve(path.dirname(markdownPath), themeRelDir);
   return {
+    mode: 'file',
     root: themeRoot,
     css: path.join(themeRoot, 'css'),
     fonts: path.join(themeRoot, 'fonts'),
@@ -397,9 +409,9 @@ function absolutizeThemeAssetUrls(content, themeAssetBase) {
   if (!content || !themeAssetBase) return content;
 
   const cssAssetUrls = new Map([
-    ['us-title-bg.png', pathToFileURL(path.join(themeAssetBase.css, 'us-title-bg.png')).href],
-    ['us-default-bg.png', pathToFileURL(path.join(themeAssetBase.css, 'us-default-bg.png')).href],
-    ['us-footer.png', pathToFileURL(path.join(themeAssetBase.css, 'us-footer.png')).href],
+    ['us-title-bg.png', themeAssetBase.mode === 'relative' ? path.posix.join(themeAssetBase.css, 'us-title-bg.png') : pathToFileURL(path.join(themeAssetBase.css, 'us-title-bg.png')).href],
+    ['us-default-bg.png', themeAssetBase.mode === 'relative' ? path.posix.join(themeAssetBase.css, 'us-default-bg.png') : pathToFileURL(path.join(themeAssetBase.css, 'us-default-bg.png')).href],
+    ['us-footer.png', themeAssetBase.mode === 'relative' ? path.posix.join(themeAssetBase.css, 'us-footer.png') : pathToFileURL(path.join(themeAssetBase.css, 'us-footer.png')).href],
   ]);
 
   let out = content;
@@ -415,11 +427,21 @@ function absolutizeThemeAssetUrls(content, themeAssetBase) {
 
   out = out.replace(
     /url\((['"])\.\.\/fonts\/([^'")]+)\1\)/g,
-    (_, _quote, fontPath) => `url("${pathToFileURL(path.join(themeAssetBase.fonts, fontPath)).href}")`
+    (_, _quote, fontPath) =>
+      `url("${
+        themeAssetBase.mode === 'relative'
+          ? path.posix.join(themeAssetBase.fonts, fontPath)
+          : pathToFileURL(path.join(themeAssetBase.fonts, fontPath)).href
+      }")`
   );
   out = out.replace(
     /url\(\.\.\/fonts\/([^'")]+)\)/g,
-    (_, fontPath) => `url("${pathToFileURL(path.join(themeAssetBase.fonts, fontPath)).href}")`
+    (_, fontPath) =>
+      `url("${
+        themeAssetBase.mode === 'relative'
+          ? path.posix.join(themeAssetBase.fonts, fontPath)
+          : pathToFileURL(path.join(themeAssetBase.fonts, fontPath)).href
+      }")`
   );
 
   return out;
