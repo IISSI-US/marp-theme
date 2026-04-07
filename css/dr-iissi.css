@@ -131,7 +131,10 @@ section {
   --iissi-gap:     1em;
   --iissi-box-border: 2px solid var(--iissi-granate);
   --iissi-box-radius: 8px;
+  --iissi-image-box-border: 1px solid rgba(159, 23, 50, 0.18);
+  --iissi-image-box-radius: 8px;
   --iissi-image-box-padding: 6px;
+  --iissi-image-inner-radius: 4px;
   --iissi-formula-bg: #dff1ff;
   --iissi-mr-bg: #e3e3e3;
   --iissi-sql-bg: #9af3b3;
@@ -507,8 +510,8 @@ section.three-col:has(> .col.left, > .col.center, > .col.right) > .col > :first-
    Se aplica a imágenes en cualquier layout.
    --------------------------------------------------------------------------- */
 section:is(.default, .two-col, .three-col, .two-col-3-7, .two-col-7-3) p:has(> img):not(:has(img.emoji)) {
-  border: var(--iissi-box-border);
-  border-radius: var(--iissi-box-radius);
+  border: var(--iissi-image-box-border);
+  border-radius: var(--iissi-image-box-radius);
   padding: var(--iissi-image-box-padding);
   display: flex;
   align-items: center;
@@ -521,7 +524,7 @@ section:is(.default, .two-col, .three-col, .two-col-3-7, .two-col-7-3) p:has(> i
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  border-radius: 4px;
+  border-radius: var(--iissi-image-inner-radius);
 }
 
 /* En layout default la imagen crece para ocupar el espacio vertical

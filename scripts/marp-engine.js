@@ -365,6 +365,26 @@ function parseThemeRelDir(markdown) {
   return null;
 }
 
+function parseBooleanFrontMatter(markdown, key) {
+  if (typeof markdown !== 'string') return null;
+
+  const frontMatter = markdown.match(/^---\n([\s\S]*?)\n---(?:\n|$)/);
+  if (!frontMatter) return null;
+
+  const pattern = new RegExp(`^\\s*${key}\\s*:\\s*(.+?)\\s*$`);
+
+  for (const line of frontMatter[1].split('\n')) {
+    const match = line.match(pattern);
+    if (!match) continue;
+
+    const raw = match[1].trim().replace(/^['"]|['"]$/g, '').toLowerCase();
+    if (raw === 'true') return true;
+    if (raw === 'false') return false;
+  }
+
+  return null;
+}
+
 function guessMarkdownPathFromArgv() {
   for (let i = process.argv.length - 1; i >= 0; i -= 1) {
     const arg = process.argv[i];
@@ -447,6 +467,36 @@ function absolutizeThemeAssetUrls(content, themeAssetBase) {
   return out;
 }
 
+function buildImageBoxInlineStyle(markdown) {
+  const imageBox = parseBooleanFrontMatter(markdown, 'image-box');
+  if (imageBox !== false) return null;
+
+  return [
+    '--iissi-image-box-border:0 solid transparent',
+    '--iissi-image-box-radius:0px',
+    '--iissi-image-box-padding:0px',
+    '--iissi-image-inner-radius:0px',
+  ].join(';');
+}
+
+function applyThemeFrontMatterOptionsToHtml(html, markdown) {
+  if (typeof html !== 'string') return html;
+
+  const imageBoxInlineStyle = buildImageBoxInlineStyle(markdown);
+  if (!imageBoxInlineStyle) return html;
+
+  return html.replace(/<section\b([^>]*)>/g, (match, attrs) => {
+    if (/style="/.test(attrs)) {
+      return match.replace(
+        /style="([^"]*)"/,
+        (_, existingStyle) => `style="${existingStyle}${existingStyle.trim().endsWith(';') ? '' : ';'}${imageBoxInlineStyle};"`
+      );
+    }
+
+    return `<section${attrs} style="${imageBoxInlineStyle};">`;
+  });
+}
+
 module.exports = class MarpEngine extends Marp {
   constructor(opts = {}) {
     super({
@@ -501,6 +551,7 @@ module.exports = class MarpEngine extends Marp {
         (tag) => tag.replace(/\sdata-auto-scaling="downscale-only"/g, '')
       );
       out.html = absolutizeThemeAssetUrls(out.html, themeAssetBase);
+      out.html = applyThemeFrontMatterOptionsToHtml(out.html, args[0]);
     }
 
     if (out && typeof out.css === 'string') {

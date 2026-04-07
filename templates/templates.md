@@ -3,6 +3,7 @@ marp: true
 theme: dr-iissi
 marp-theme-rel-dir: ..
 paginate: true
+image-box: false
 ---
 
 <!-- _class: title -->
@@ -45,6 +46,7 @@ theme: dr-iissi
 marp-theme-rel-dir: ../../marp-theme
 paginate: true
 size: 16:9
+image-box: false
 ---
 ```
 
@@ -59,6 +61,13 @@ size: 16:9
 - In this guide the value is `..`
 - In `iissi-1/t*/...md` files the value is `../../marp-theme`
 - Use a relative path so PDF builds stay portable across machines
+
+`image-box` controls whether images use the default framed box style.
+
+- Use `image-box: false` to disable the image box for the whole deck
+- Omit it, or use `image-box: true`, to keep the default behavior
+
+By default, images use a very subtle granate frame.
 
 If the path is wrong, background images and local fonts may not resolve during render.
 
@@ -291,10 +300,32 @@ Body text should remain readable below centered secondary headings.
 # Layout: `default` with text and image
 
 - Text may appear before a framed image.
-- Images should keep their box styling.
+- Images can keep their box styling, or disable it with `image-box: false`.
 - Spacing should remain consistent.
 
 ![](./images/ejemplo-t2-ciclos-evolutivos.png)
+
+---
+
+<!-- _class: default -->
+
+# Image box option
+
+Use `image-box: false` in the YAML front matter to remove the default framed image box for the whole deck.
+
+Example:
+
+```yaml
+---
+marp: true
+theme: dr-iissi
+marp-theme-rel-dir: ..
+paginate: true
+image-box: false
+---
+```
+
+This deck normally renders with the default image box enabled, so visual checks for `image-box: false` should be done by temporarily enabling that option in this file.
 
 ---
 

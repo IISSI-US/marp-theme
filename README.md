@@ -102,10 +102,21 @@ marp: true
 theme: dr-iissi
 marp-theme-rel-dir: ./marp-theme
 paginate: true
+image-box: false
 ---
 ```
 
 Adjust `marp-theme-rel-dir` so it is relative to the markdown file being rendered.
+
+Optional front matter:
+
+- `image-box: false` disables the default framed box around images for that deck
+- omit it, or use `image-box: true`, to keep the current framed style
+
+Default image styling:
+
+- images keep a very subtle granate frame by default
+- `image-box: false` removes that frame, padding, and rounded corners
 
 ## Templates guide
 
