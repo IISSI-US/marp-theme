@@ -769,7 +769,7 @@ Write display formulas with `$$ ... $$` and use:
 - `\Ren_{...}` for renaming
 - `\Group^{...}_{...}` for grouping and aggregation
 - `\NatJoin`, `\JoinBy{...}` for joins
-- `\Union`, `\Inter`, `\Diff` for set operators
+- `\Union`, `\Inter` and `-` for set operators
 
 ---
 
@@ -804,7 +804,7 @@ $$
 \Group^{\mathrm{count}(Ped.id)}_{\text{P.de}}(Ped \NatJoin P)
 $$
 $$
-Emp \Union Dept,\quad Emp \Inter Dept,\quad Emp \Diff Dept
+Emp \Union Dept,\quad Emp \Inter Dept,\quad Emp - Dept
 $$
 
 ---
