@@ -163,6 +163,340 @@ function highlightMr(code) {
   return rendered.join('\n');
 }
 
+function splitTopLevel(text, separator = ',') {
+  const parts = [];
+  let current = '';
+  let quote = '';
+  let depth = 0;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    const prev = text[i - 1];
+
+    if (quote) {
+      current += ch;
+      if (ch === quote && prev !== '\\') quote = '';
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      quote = ch;
+      current += ch;
+      continue;
+    }
+
+    if (ch === '(' || ch === '{' || ch === '[') depth += 1;
+    if (ch === ')' || ch === '}' || ch === ']') depth = Math.max(0, depth - 1);
+
+    if (ch === separator && depth === 0) {
+      parts.push(current.trim());
+      current = '';
+      continue;
+    }
+
+    current += ch;
+  }
+
+  if (current.trim()) parts.push(current.trim());
+  return parts;
+}
+
+function stripOuterQuotes(value) {
+  const trimmed = value.trim();
+  if (trimmed.length >= 2) {
+    const first = trimmed[0];
+    const last = trimmed[trimmed.length - 1];
+    if ((first === "'" && last === "'") || (first === '"' && last === '"')) {
+      return trimmed.slice(1, -1);
+    }
+  }
+  return trimmed;
+}
+
+function cleanMrAttribute(raw) {
+  return raw
+    .trim()
+    .replace(/^(PK|AK|FK)\s+/i, '')
+    .replace(/\s+(PK|AK|FK)$/i, '')
+    .replace(/\s+/g, ' ');
+}
+
+function splitMrLineComment(line) {
+  let quote = '';
+
+  for (let i = 0; i < line.length - 1; i += 1) {
+    const ch = line[i];
+    const next = line[i + 1];
+    const prev = line[i - 1];
+
+    if (quote) {
+      if (ch === quote && prev !== '\\') quote = '';
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      quote = ch;
+      continue;
+    }
+
+    if (ch === '-' && next === '-') {
+      return {
+        code: line.slice(0, i).trimEnd(),
+        comment: line.slice(i + 2).trim(),
+      };
+    }
+  }
+
+  return { code: line, comment: '' };
+}
+
+function isMrStructuralComment(comment) {
+  return /^(intensión|extension|extensión)\b/i.test(comment.replace(/-+$/g, '').trim());
+}
+
+function relationByName(relations, name, knownSchemas = null) {
+  let relation = relations.find((candidate) => candidate.name === name);
+  if (!relation) {
+    const known = knownSchemas && knownSchemas[name];
+    relation = {
+      name,
+      attributes: known ? [...known.attributes] : [],
+      rows: [],
+      constraints: known ? [...known.constraints] : [],
+      comments: [],
+    };
+    relations.push(relation);
+  }
+  return relation;
+}
+
+function parseMrConstraint(line) {
+  const match = line.trim().match(/^(PK|AK|FK)\s*\(([^)]*)\)\s*(?:\/\s*([A-Za-zÁÉÍÓÚÜÑáéíóúüñ][\wÁÉÍÓÚÜÑáéíóúüñ]*))?\s*$/i);
+  if (!match) return null;
+
+  const [, kind, attrs, target] = match;
+  const normalizedKind = kind.toUpperCase();
+  const normalizedAttrs = splitTopLevel(attrs).join(', ');
+  return target
+    ? `${normalizedKind}(${normalizedAttrs}) / ${target}`
+    : `${normalizedKind}(${normalizedAttrs})`;
+}
+
+function parseMrRows(body) {
+  const rows = [];
+  const tuplePattern = /\(([^()]*)\)/g;
+
+  for (const match of body.matchAll(tuplePattern)) {
+    rows.push(splitTopLevel(match[1]).map(stripOuterQuotes));
+  }
+
+  if (rows.length > 0 && /\.\.\./.test(body)) {
+    const ellipsisRow = [];
+    ellipsisRow.ellipsis = true;
+    rows.push(ellipsisRow);
+  }
+
+  return rows;
+}
+
+function collectMrAssignment(lines, startIndex, firstLine) {
+  const first = splitMrLineComment(firstLine);
+  const match = first.code.trim().match(/^([^={}]+?)\s*=\s*\{(.*)$/);
+  if (!match) return null;
+
+  const [, namePart, firstBody] = match;
+  const name = namePart.trim();
+  if (!name) return null;
+
+  const bodyLines = [];
+  const comments = [];
+  let body = firstBody;
+  let endIndex = startIndex;
+  if (first.comment && !isMrStructuralComment(first.comment)) comments.push(first.comment);
+
+  while (true) {
+    const close = body.indexOf('}');
+    if (close >= 0) {
+      bodyLines.push(body.slice(0, close));
+      break;
+    }
+
+    bodyLines.push(body);
+    endIndex += 1;
+    if (endIndex >= lines.length) return null;
+    const line = splitMrLineComment(lines[endIndex]);
+    body = line.code;
+    if (line.comment && !isMrStructuralComment(line.comment)) comments.push(line.comment);
+  }
+
+  return {
+    name,
+    body: bodyLines.join('\n').trim(),
+    comments,
+    endIndex,
+  };
+}
+
+function parseMr(code, knownSchemas = null) {
+  const relations = [];
+  const lines = code.split('\n');
+  let currentRelation = null;
+  let pendingComments = [];
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i];
+    const lineParts = splitMrLineComment(line);
+    const trimmed = lineParts.code.trim();
+
+    if (!trimmed) {
+      if (lineParts.comment && !isMrStructuralComment(lineParts.comment)) {
+        if (currentRelation) {
+          currentRelation.comments.push(lineParts.comment);
+        } else {
+          pendingComments.push(lineParts.comment);
+        }
+      }
+      continue;
+    }
+
+    const assignment = collectMrAssignment(lines, i, line);
+    if (assignment) {
+      const rows = parseMrRows(assignment.body);
+      const relation = relationByName(relations, assignment.name, knownSchemas);
+      if (rows.length > 0) {
+        relation.rows = rows;
+      } else {
+        relation.attributes = splitTopLevel(assignment.body).map(cleanMrAttribute).filter(Boolean);
+        relation.rows = [];
+        relation.constraints = [];
+        relation.comments = [];
+      }
+      relation.comments.push(...pendingComments, ...assignment.comments);
+      pendingComments = [];
+      currentRelation = relation;
+      i = assignment.endIndex;
+      continue;
+    }
+
+    const constraint = parseMrConstraint(trimmed);
+    if (constraint && currentRelation) {
+      currentRelation.constraints.push(constraint);
+      if (lineParts.comment && !isMrStructuralComment(lineParts.comment)) {
+        currentRelation.comments.push(lineParts.comment);
+      }
+      continue;
+    }
+
+    return null;
+  }
+
+  const valid = relations.filter((relation) => relation.name && relation.attributes.length > 0);
+  return valid.length > 0 ? valid : null;
+}
+
+function mrConstraintAttrs(constraint, kind) {
+  const match = constraint.match(new RegExp(`^${kind}\\(([^)]*)\\)`, 'i'));
+  return match ? splitTopLevel(match[1]) : [];
+}
+
+function mrAttributeKey(attribute) {
+  return attribute.replace(/\s+null$/i, '').trim();
+}
+
+function mrAttributeClasses(relation, attribute) {
+  const attr = mrAttributeKey(attribute);
+  const pkAttrs = relation.constraints.flatMap((constraint) => mrConstraintAttrs(constraint, 'PK'));
+  const fkAttrs = relation.constraints.flatMap((constraint) => mrConstraintAttrs(constraint, 'FK'));
+  const classes = [];
+
+  if (pkAttrs.includes(attr)) classes.push('mr-pk-col');
+  if (fkAttrs.includes(attr)) classes.push('mr-fk-col');
+  return classes.join(' ');
+}
+
+function renderMrCell(value, className = '') {
+  const trimmed = String(value).trim();
+  const classes = className ? [className] : [];
+  if (/^null$/i.test(trimmed)) classes.push('mr-null');
+  const cls = classes.length ? ` class="${classes.join(' ')}"` : '';
+  return `<td${cls}>${escapeHtml(trimmed)}</td>`;
+}
+
+function renderMrConstraint(constraint) {
+  const match = constraint.match(/^(PK|AK|FK)(\(.*)$/);
+  if (!match) return escapeHtml(constraint);
+
+  const [, kind, rest] = match;
+  return `<span class="mr-constraint-kind mr-constraint-${kind.toLowerCase()}">${kind}</span>${escapeHtml(rest)}`;
+}
+
+function renderMrTable(relation) {
+  const colCount = Math.max(1, relation.attributes.length);
+  const constraints = [...new Set(relation.constraints)];
+  const headerCells = relation.attributes
+    .map((attr) => {
+      const className = mrAttributeClasses(relation, attr);
+      const cls = className ? ` class="${className}"` : '';
+      return `<th${cls}>${escapeHtml(attr)}</th>`;
+    })
+    .join('');
+  const bodyRows = relation.rows
+    .map((row) => {
+      if (row.ellipsis) {
+        return `<tr class="mr-ellipsis"><td colspan="${colCount}">...</td></tr>`;
+      }
+
+      const cells = relation.attributes.map((attr, index) => {
+        const className = mrAttributeClasses(relation, attr);
+        return renderMrCell(row[index] ?? '', className);
+      });
+      return `<tr>${cells.join('')}</tr>`;
+    })
+    .join('');
+  const comments = [...new Set(relation.comments || [])];
+  const footItems = [
+    ...constraints.map((constraint) => `<div class="mr-constraint">${renderMrConstraint(constraint)}</div>`),
+    ...comments.map((comment) => `<div class="mr-comment">${escapeHtml(comment)}</div>`),
+  ].join('');
+  const notesRow = footItems
+    ? `<tr class="mr-notes"><td colspan="${colCount}">${footItems}</td></tr>`
+    : '';
+
+  return [
+    '<figure class="mr-relation-block">',
+    '<table class="mr-table">',
+    '<thead>',
+    `<tr class="mr-relation-name"><th colspan="${colCount}">${escapeHtml(relation.name)}</th></tr>`,
+    notesRow,
+    `<tr class="mr-intension">${headerCells}</tr>`,
+    '</thead>',
+    bodyRows ? `<tbody>${bodyRows}</tbody>` : '',
+    '</table>',
+    '</figure>',
+  ].join('');
+}
+
+function rememberMrSchemas(relations, knownSchemas) {
+  if (!knownSchemas) return;
+
+  for (const relation of relations) {
+    if (relation.attributes.length === 0) continue;
+
+    knownSchemas[relation.name] = {
+      attributes: [...relation.attributes],
+      constraints: [...new Set(relation.constraints)],
+    };
+  }
+}
+
+function renderMr(code, knownSchemas = null) {
+  const relations = parseMr(code, knownSchemas);
+  if (!relations) return null;
+
+  rememberMrSchemas(relations, knownSchemas);
+  return `<div class="mr-relations">${relations.map(renderMrTable).join('')}</div>`;
+}
+
 function codeFontClassFromInfo(info) {
   const parts = (info || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
   const flags = new Set(parts.slice(1));
@@ -515,9 +849,18 @@ module.exports = class MarpEngine extends Marp {
         const codeFontClass = codeFontClassFromInfo(info);
         const hljsLanguages = new Set(['sql', 'python', 'javascript', 'html', 'css']);
 
-        if (lang === 'mr') {
-          const html = highlightMr(token.content);
-          return `<pre class="language-mr${codeFontClass}" data-lang="mr"><code class="language-mr">${html}</code></pre>\n`;
+        if (lang === 'mr-table') {
+          env.__mrSchemas = env.__mrSchemas || {};
+          const html = renderMr(token.content, env.__mrSchemas);
+          if (html) return html.replace('class="mr-relations"', `class="mr-relations${codeFontClass}"`) + '\n';
+
+          const highlighted = highlightMr(token.content);
+          return `<pre class="language-mr-text${codeFontClass}" data-lang="mr-text"><code class="language-mr-text">${highlighted}</code></pre>\n`;
+        }
+
+        if (lang === 'mr-text' || lang === 'mr') {
+          const highlighted = highlightMr(token.content);
+          return `<pre class="language-mr-text${codeFontClass}" data-lang="mr-text"><code class="language-mr-text">${highlighted}</code></pre>\n`;
         }
 
         if (hljsLanguages.has(lang)) {
