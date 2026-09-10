@@ -875,6 +875,23 @@ section.default .mr-relations {
   font-style: italic;
 }
 
+.mr-table .mr-constraint-kind {
+  border-radius: 0.18em;
+  display: inline-block;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-right: 0.1em;
+  padding: 0.02em 0.18em;
+}
+
+.mr-table .mr-constraint-pk {
+  background: rgba(159, 23, 50, 0.12);
+}
+
+.mr-table .mr-constraint-fk {
+  background: rgba(0, 90, 156, 0.11);
+}
+
 /* ---------------------------------------------------------------------------
    Resaltado hljs
    --------------------------------------------------------------------------- */
