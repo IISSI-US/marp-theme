@@ -142,7 +142,9 @@ section {
   --iissi-javascript-bg: #fff2a8;
   --iissi-html-bg: #ffd9cc;
   --iissi-css-bg: #d9f5e4;
-  --iissi-col-media-max-h: calc(100vh - 250px);
+  /* Marp compone sobre un lienzo fijo de 720 px. Usar vh hacía que las
+     imágenes de columnas cambiasen de tamaño según el visor HTML. */
+  --iissi-col-media-max-h: 470px;
   --iissi-font-family: 'Roboto', sans-serif;
   --iissi-code-font-family: Consolas, 'Liberation Mono', Menlo, Monaco, 'Courier New', monospace;
   /* Fórmulas KaTeX: escalas controlables (heredan fit-*) */
