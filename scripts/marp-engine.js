@@ -66,6 +66,7 @@ const AR_KATEX_MACROS = {
   '\\JoinR': '\\mathbin{\\Large\\bowtie}',
   '\\JoinBy': '\\mathbin{\\mathop{\\Large\\bowtie}\\limits_{#1}}',
   '\\NatJoin': '\\mathbin{\\Large\\bowtie}',
+  '\\Div': '\\mathbin{\\Large\\div}',
   '\\Union': '\\mathbin{\\Large\\cup}',
   '\\Inter': '\\mathbin{\\Large\\cap}',
 };
